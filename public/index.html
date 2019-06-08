@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+    <input id="studentId" type="text" placeholder="studentId">
+    <button id="doorBell">I'm here!</button>
+
+    <!--<script src="main.js"></script>-->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io('https://sdcs-here-i-am.herokuapp.com/');
+      </script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        $(function () {
+        //var socket = io();
+        $('#doorBell').click(function(e){
+        e.preventDefault(); // prevents page reloading
+        var student = $("#studentId").val();
+        console.log(student);
+
+     
+            if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position){
+            
+        var user= {
+            userid: student,
+            location: {
+                Lat: position.coords.latitude,
+                Long: position.coords.longitude,
+            }
+        }
+        socket.emit('doorbell', user);
+            });
+            } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+             }
+        
+
+        // $('#m').val('');
+        // return false;
+        });
+        socket.on('got it', function (data) {
+            console.log('blah blah', data);
+        });
+    });
+    </script>
+</body>
+</html>
